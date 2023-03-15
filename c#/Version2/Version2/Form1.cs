@@ -117,12 +117,12 @@ namespace Version2
                             Image<Gray, Byte> grayFaceResult = detectedFace.Convert<Gray, Byte>().Resize(200, 200, Inter.Cubic);
                             CvInvoke.EqualizeHist(grayFaceResult, grayFaceResult);
                             var result = recognizer.Predict(grayFaceResult);
-                            pictureBox2.Image = grayFaceResult.Bitmap;
-                            pictureBox3.Image = TrainedFaces[result.Label].Bitmap;
+                            pictureBox2.Image = grayFaceResult.Resize(pictureBox2.Width, pictureBox2.Height, Inter.Cubic).Bitmap;
+                            pictureBox3.Image = TrainedFaces[result.Label].Resize(pictureBox3.Width, pictureBox3.Height, Inter.Cubic).Bitmap;
                             label1.Text = result.Label + ". " + result.Distance;
 
                             //Here results found known faces
-                            if (result.Label != -1 && result.Distance < 1000)
+                            if (result.Label != -1 && result.Distance < 2000)
                             {
                                 CvInvoke.PutText(currentFrame, PersonsNames[result.Label], new Point(face.X - 2, face.Y - 2),
                                     FontFace.HersheyComplex, 1.0, new Bgr(Color.Orange).MCvScalar);
