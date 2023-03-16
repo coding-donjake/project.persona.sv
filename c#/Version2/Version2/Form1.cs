@@ -27,13 +27,17 @@ namespace Version2
         private Image<Bgr, Byte> detectedFace = null;   // detedted face
 
         // cascade file for face detection
-        CascadeClassifier faceCasacdeClassifier = new CascadeClassifier(@"haarcascade_frontalface_default.xml");
+        CascadeClassifier faceCasacdeClassifier = new CascadeClassifier(@"haarcascade_frontalface_alt.xml");
 
         // for face recognition
         EigenFaceRecognizer recognizer;
         List<Image<Gray, Byte>> TrainedFaces = new List<Image<Gray, byte>>();
         List<int> PersonsLabes = new List<int>();
         List<string> PersonsNames = new List<string>();
+        private string currentPerson = "";
+
+        // for saving face images
+        private bool saving = false;
         #endregion
         public Form1()
         {
@@ -64,7 +68,7 @@ namespace Version2
 
                 if (TrainedFaces.Count() > 0)
                 {
-                    recognizer = new EigenFaceRecognizer(ImagesCount, double.PositiveInfinity);
+                    recognizer = new EigenFaceRecognizer(ImagesCount, Double.PositiveInfinity);
                     recognizer.Train(TrainedFaces.ToArray(), PersonsLabes.ToArray());
                 }
             }
@@ -76,6 +80,7 @@ namespace Version2
 
         private void processFrame(object sender, EventArgs e)
         {
+            label2.Text = "Saving: " + saving;
             if (videoCapture != null && videoCapture.Ptr != IntPtr.Zero)
             {
                 // takes a frame on the camera and converts it into an image object adjusting its size using picCamera size
@@ -112,7 +117,7 @@ namespace Version2
                         pictureBox1.Image = detectedFace.Bitmap;
 
                         // recognize face
-                        if (PersonsNames.Count > 0)
+                        if (PersonsNames.Count > 0 && !saving)
                         {
                             Image<Gray, Byte> grayFaceResult = detectedFace.Convert<Gray, Byte>().Resize(200, 200, Inter.Cubic);
                             CvInvoke.EqualizeHist(grayFaceResult, grayFaceResult);
@@ -121,20 +126,23 @@ namespace Version2
                             pictureBox3.Image = TrainedFaces[result.Label].Resize(pictureBox3.Width, pictureBox3.Height, Inter.Cubic).Bitmap;
                             label1.Text = result.Label + ". " + result.Distance;
 
-                            //Here results found known faces
-                            if (result.Label != -1 && result.Distance < 2000)
+                            // Here results found known faces
+                            if (result.Label != -1 && result.Distance > 8000 && PersonsNames[result.Label] != "unknowm")
                             {
-                                CvInvoke.PutText(currentFrame, PersonsNames[result.Label], new Point(face.X - 2, face.Y - 2),
-                                    FontFace.HersheyComplex, 1.0, new Bgr(Color.Orange).MCvScalar);
-                                CvInvoke.Rectangle(currentFrame, face, new Bgr(Color.Green).MCvScalar, 2);
+                                currentPerson = PersonsNames[result.Label];
                             }
 
-                            //here results did not found any know faces
+                            // here results did not found any know faces
                             else
                             {
-                                CvInvoke.PutText(currentFrame, "Unknown", new Point(face.X - 2, face.Y - 2),
-                                    FontFace.HersheyComplex, 1.0, new Bgr(Color.Orange).MCvScalar);
-                                CvInvoke.Rectangle(currentFrame, face, new Bgr(Color.Red).MCvScalar, 2);
+                                pictureBox3.Image = null;
+                            }
+
+                            if (currentPerson != "")
+                            {
+                                CvInvoke.PutText(currentFrame, PersonsNames[result.Label], new Point(face.X - 2, face.Y - 2),
+                                FontFace.HersheyComplex, 1.0, new Bgr(Color.Orange).MCvScalar);
+                                CvInvoke.Rectangle(currentFrame, face, new Bgr(Color.Green).MCvScalar, 2);
                             }
                         }
                     }
@@ -144,6 +152,7 @@ namespace Version2
 
         private void saveFace(object sender, EventArgs e)
         {
+            saving = true;
             string path = Directory.GetCurrentDirectory() + @"\SavedFaces";
             if (!Directory.Exists(path))
             {
@@ -159,6 +168,7 @@ namespace Version2
                     {
                         loadSavedFaceFiles();
                         Thread.Sleep(5000);
+                        saving = false;
                     }
                 }
             });
