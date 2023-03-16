@@ -37,7 +37,7 @@ namespace Version2
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.btnStartCameraCapture = new System.Windows.Forms.Button();
             this.txtPersonName = new System.Windows.Forms.TextBox();
-            this.btnSaveFace = new System.Windows.Forms.Button();
+            this.btnToggleSaveFace = new System.Windows.Forms.Button();
             this.labelFacesCount = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -115,15 +115,15 @@ namespace Version2
             this.txtPersonName.Size = new System.Drawing.Size(243, 20);
             this.txtPersonName.TabIndex = 7;
             // 
-            // btnSaveFace
+            // btnToggleSaveFace
             // 
-            this.btnSaveFace.Location = new System.Drawing.Point(630, 346);
-            this.btnSaveFace.Name = "btnSaveFace";
-            this.btnSaveFace.Size = new System.Drawing.Size(243, 40);
-            this.btnSaveFace.TabIndex = 8;
-            this.btnSaveFace.Text = "Save Person";
-            this.btnSaveFace.UseVisualStyleBackColor = true;
-            this.btnSaveFace.Click += new System.EventHandler(this.saveFace);
+            this.btnToggleSaveFace.Location = new System.Drawing.Point(630, 346);
+            this.btnToggleSaveFace.Name = "btnToggleSaveFace";
+            this.btnToggleSaveFace.Size = new System.Drawing.Size(243, 40);
+            this.btnToggleSaveFace.TabIndex = 8;
+            this.btnToggleSaveFace.Text = "Toggle Saving";
+            this.btnToggleSaveFace.UseVisualStyleBackColor = true;
+            this.btnToggleSaveFace.Click += new System.EventHandler(this.toggleSaveFace);
             // 
             // labelFacesCount
             // 
@@ -170,7 +170,7 @@ namespace Version2
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelFacesCount);
-            this.Controls.Add(this.btnSaveFace);
+            this.Controls.Add(this.btnToggleSaveFace);
             this.Controls.Add(this.txtPersonName);
             this.Controls.Add(this.btnStartCameraCapture);
             this.Controls.Add(this.pictureBox4);
@@ -202,7 +202,7 @@ namespace Version2
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Button btnStartCameraCapture;
         private System.Windows.Forms.TextBox txtPersonName;
-        private System.Windows.Forms.Button btnSaveFace;
+        private System.Windows.Forms.Button btnToggleSaveFace;
         private System.Windows.Forms.Label labelFacesCount;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;

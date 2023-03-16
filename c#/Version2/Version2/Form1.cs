@@ -58,7 +58,7 @@ namespace Version2
                 string[] files = Directory.GetFiles(path, "*.jpg", SearchOption.AllDirectories);
                 foreach (var file in files)
                 {
-                    Image<Gray, byte> trainedImage = new Image<Gray, byte>(file).Resize(200, 200, Inter.Cubic);
+                    Image<Gray, byte> trainedImage = new Image<Gray, byte>(file).Resize(300, 300, Inter.Cubic);
                     CvInvoke.EqualizeHist(trainedImage, trainedImage);
                     TrainedFaces.Add(trainedImage);
                     PersonsLabes.Add(ImagesCount);
@@ -104,6 +104,7 @@ namespace Version2
                 labelFacesCount.Text = "Faces: " + faces.Length;
                 if (faces.Length > 0)
                 {
+                    double highDistance = 0;
                     foreach (var face in faces)
                     {
                         // draws a rectagle on every face detected
@@ -120,18 +121,21 @@ namespace Version2
                         // recognize face
                         if (PersonsNames.Count > 0 && !saving)
                         {
-                            Image<Gray, Byte> grayFaceResult = detectedFace.Convert<Gray, Byte>().Resize(200, 200, Inter.Cubic);
+                            Image<Gray, Byte> grayFaceResult = detectedFace.Convert<Gray, Byte>().Resize(300, 300, Inter.Cubic);
                             CvInvoke.EqualizeHist(grayFaceResult, grayFaceResult);
                             var result = recognizer.Predict(grayFaceResult);
                             pictureBox2.Image = grayFaceResult.Resize(pictureBox2.Width, pictureBox2.Height, Inter.Cubic).Bitmap;
-                            label1.Text = result.Label + ". " + result.Distance;
 
                             // face recognition conditions
-                            if (result.Label != -1 && result.Distance > 8000 && PersonsNames[result.Label] != "unknowm")
+                            if (result.Label != -1 && result.Distance > 2000 && !PersonsNames[result.Label].Equals("unknown"))
                             {
-                                currentPerson = PersonsNames[result.Label];
-                                currentPersonFace = TrainedFaces[result.Label];
-                                label3.Text = "Current person: " + currentPerson;
+                                if (result.Distance > highDistance)
+                                {
+                                    label1.Text = result.Label + ". " + result.Distance;
+                                    currentPerson = PersonsNames[result.Label];
+                                    currentPersonFace = TrainedFaces[result.Label];
+                                    label3.Text = "Current person: " + currentPerson;
+                                }
                             }
 
                             if (currentPerson != "")
@@ -147,26 +151,21 @@ namespace Version2
             }
         }
 
-        private void saveFace(object sender, EventArgs e)
+        private void saveFace()
         {
-            saving = true;
             string path = Directory.GetCurrentDirectory() + @"\SavedFaces";
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
             Task.Factory.StartNew(() => {
-                for (int i = 0; i < 10; i++)
+                while (true)
                 {
-                    //resize the image then saving it
-                    detectedFace.Resize(200, 200, Inter.Cubic).Save(path + @"\" + txtPersonName.Text + "_" + DateTime.Now.ToString("dd-mm-yyyy-hh-mm-ss") + ".jpg");
-                    Thread.Sleep(1000);
-                    if (i + 1 == 10)
+                    if (!saving)
                     {
-                        loadSavedFaceFiles();
-                        Thread.Sleep(5000);
-                        saving = false;
+                        break;
                     }
+                    detectedFace.Resize(300, 300, Inter.Cubic).Save(path + @"\" + txtPersonName.Text + "_" + DateTime.Now.ToString("dd-mm-yyyy-hh-mm-ss") + ".jpg");
                 }
             });
         }
@@ -178,6 +177,21 @@ namespace Version2
             //videoCapture.ImageGrabbed += processFrame;
             Application.Idle += processFrame;
             // videoCapture.Start();
+        }
+
+        private void toggleSaveFace(object sender, EventArgs e)
+        {
+            if (saving)
+            {
+                loadSavedFaceFiles();
+                saving = false;
+                
+            }
+            else
+            {
+                saving = true;
+                saveFace();
+            }
         }
     }
 }
