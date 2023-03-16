@@ -35,6 +35,7 @@ namespace Version2
         List<int> PersonsLabes = new List<int>();
         List<string> PersonsNames = new List<string>();
         private string currentPerson = "";
+        private Image<Gray, Byte> currentPersonFace = null;
 
         // for saving face images
         private bool saving = false;
@@ -123,19 +124,14 @@ namespace Version2
                             CvInvoke.EqualizeHist(grayFaceResult, grayFaceResult);
                             var result = recognizer.Predict(grayFaceResult);
                             pictureBox2.Image = grayFaceResult.Resize(pictureBox2.Width, pictureBox2.Height, Inter.Cubic).Bitmap;
-                            pictureBox3.Image = TrainedFaces[result.Label].Resize(pictureBox3.Width, pictureBox3.Height, Inter.Cubic).Bitmap;
                             label1.Text = result.Label + ". " + result.Distance;
 
-                            // Here results found known faces
+                            // face recognition conditions
                             if (result.Label != -1 && result.Distance > 8000 && PersonsNames[result.Label] != "unknowm")
                             {
                                 currentPerson = PersonsNames[result.Label];
-                            }
-
-                            // here results did not found any know faces
-                            else
-                            {
-                                pictureBox3.Image = null;
+                                currentPersonFace = TrainedFaces[result.Label];
+                                label3.Text = "Current person: " + currentPerson;
                             }
 
                             if (currentPerson != "")
@@ -143,6 +139,7 @@ namespace Version2
                                 CvInvoke.PutText(currentFrame, PersonsNames[result.Label], new Point(face.X - 2, face.Y - 2),
                                 FontFace.HersheyComplex, 1.0, new Bgr(Color.Orange).MCvScalar);
                                 CvInvoke.Rectangle(currentFrame, face, new Bgr(Color.Green).MCvScalar, 2);
+                                pictureBox3.Image = currentPersonFace.Resize(pictureBox3.Width, pictureBox3.Height, Inter.Cubic).Bitmap;
                             }
                         }
                     }
