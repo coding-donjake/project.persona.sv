@@ -104,7 +104,7 @@ namespace Version2
                 labelFacesCount.Text = "Faces: " + faces.Length;
                 if (faces.Length > 0)
                 {
-                    double highDistance = 0;
+                    double lowDistance = Double.PositiveInfinity;
                     foreach (var face in faces)
                     {
                         // draws a rectagle on every face detected
@@ -127,9 +127,9 @@ namespace Version2
                             pictureBox2.Image = grayFaceResult.Resize(pictureBox2.Width, pictureBox2.Height, Inter.Cubic).Bitmap;
 
                             // face recognition conditions
-                            if (result.Label != -1 && result.Distance > 2000 && !PersonsNames[result.Label].Equals("unknown"))
+                            if (result.Label != -1 && !PersonsNames[result.Label].Equals("unknown"))
                             {
-                                if (result.Distance > highDistance)
+                                if (result.Distance < lowDistance)
                                 {
                                     label1.Text = result.Label + ". " + result.Distance;
                                     currentPerson = PersonsNames[result.Label];
