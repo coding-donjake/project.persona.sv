@@ -165,7 +165,7 @@ namespace Version2
                     {
                         break;
                     }
-                    detectedFace.Resize(300, 300, Inter.Cubic).Save(path + @"\" + txtPersonName.Text + "_" + DateTime.Now.ToString("dd-mm-yyyy-hh-mm-ss") + ".jpg");
+                    detectedFace.Convert<Gray, Byte>().Resize(300, 300, Inter.Cubic).Save(path + @"\" + txtPersonName.Text + "_" + DateTime.Now.ToString("dd-mm-yyyy-hh-mm-ss") + ".jpg");
                 }
             });
         }

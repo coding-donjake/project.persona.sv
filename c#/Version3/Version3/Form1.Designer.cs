@@ -33,13 +33,13 @@ namespace Version3
             this.picCompare1 = new System.Windows.Forms.PictureBox();
             this.picCompare2 = new System.Windows.Forms.PictureBox();
             this.picCamera = new System.Windows.Forms.PictureBox();
-            this.picDetected = new System.Windows.Forms.PictureBox();
+            this.picFaceDetection = new System.Windows.Forms.PictureBox();
             this.picFace3 = new System.Windows.Forms.PictureBox();
             this.picFace2 = new System.Windows.Forms.PictureBox();
             this.picFace1 = new System.Windows.Forms.PictureBox();
             this.btnCapture = new System.Windows.Forms.Button();
             this.txtPersonName = new System.Windows.Forms.TextBox();
-            this.btnToggleSave = new System.Windows.Forms.Button();
+            this.btnToggleSaveFace = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtFaces = new System.Windows.Forms.TextBox();
             this.txtPerson = new System.Windows.Forms.TextBox();
@@ -55,7 +55,7 @@ namespace Version3
             ((System.ComponentModel.ISupportInitialize)(this.picCompare1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCompare2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCamera)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picDetected)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picFaceDetection)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picFace3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picFace2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picFace1)).BeginInit();
@@ -97,14 +97,14 @@ namespace Version3
             this.picCamera.TabIndex = 3;
             this.picCamera.TabStop = false;
             // 
-            // picDetected
+            // picFaceDetection
             // 
-            this.picDetected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picDetected.Location = new System.Drawing.Point(330, 12);
-            this.picDetected.Name = "picDetected";
-            this.picDetected.Size = new System.Drawing.Size(312, 312);
-            this.picDetected.TabIndex = 7;
-            this.picDetected.TabStop = false;
+            this.picFaceDetection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picFaceDetection.Location = new System.Drawing.Point(330, 12);
+            this.picFaceDetection.Name = "picFaceDetection";
+            this.picFaceDetection.Size = new System.Drawing.Size(312, 312);
+            this.picFaceDetection.TabIndex = 7;
+            this.picFaceDetection.TabStop = false;
             // 
             // picFace3
             // 
@@ -141,6 +141,7 @@ namespace Version3
             this.btnCapture.TabIndex = 8;
             this.btnCapture.Text = "Open Camera";
             this.btnCapture.UseVisualStyleBackColor = true;
+            this.btnCapture.Click += new System.EventHandler(this.btnCapture_Click);
             // 
             // txtPersonName
             // 
@@ -149,14 +150,15 @@ namespace Version3
             this.txtPersonName.Size = new System.Drawing.Size(174, 20);
             this.txtPersonName.TabIndex = 9;
             // 
-            // btnToggleSave
+            // btnToggleSaveFace
             // 
-            this.btnToggleSave.Location = new System.Drawing.Point(648, 356);
-            this.btnToggleSave.Name = "btnToggleSave";
-            this.btnToggleSave.Size = new System.Drawing.Size(174, 23);
-            this.btnToggleSave.TabIndex = 10;
-            this.btnToggleSave.Text = "Start Saving Images";
-            this.btnToggleSave.UseVisualStyleBackColor = true;
+            this.btnToggleSaveFace.Location = new System.Drawing.Point(648, 356);
+            this.btnToggleSaveFace.Name = "btnToggleSaveFace";
+            this.btnToggleSaveFace.Size = new System.Drawing.Size(174, 23);
+            this.btnToggleSaveFace.TabIndex = 10;
+            this.btnToggleSaveFace.Text = "Start Saving Face";
+            this.btnToggleSaveFace.UseVisualStyleBackColor = true;
+            this.btnToggleSaveFace.Click += new System.EventHandler(this.toggleSaveFace);
             // 
             // label1
             // 
@@ -263,10 +265,10 @@ namespace Version3
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtFaces);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnToggleSave);
+            this.Controls.Add(this.btnToggleSaveFace);
             this.Controls.Add(this.txtPersonName);
             this.Controls.Add(this.btnCapture);
-            this.Controls.Add(this.picDetected);
+            this.Controls.Add(this.picFaceDetection);
             this.Controls.Add(this.picFace3);
             this.Controls.Add(this.picFace2);
             this.Controls.Add(this.picFace1);
@@ -280,7 +282,7 @@ namespace Version3
             ((System.ComponentModel.ISupportInitialize)(this.picCompare1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCompare2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picCamera)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picDetected)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picFaceDetection)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picFace3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picFace2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picFace1)).EndInit();
@@ -295,13 +297,13 @@ namespace Version3
         private System.Windows.Forms.PictureBox picCompare1;
         private System.Windows.Forms.PictureBox picCompare2;
         private System.Windows.Forms.PictureBox picCamera;
-        private System.Windows.Forms.PictureBox picDetected;
+        private System.Windows.Forms.PictureBox picFaceDetection;
         private System.Windows.Forms.PictureBox picFace3;
         private System.Windows.Forms.PictureBox picFace2;
         private System.Windows.Forms.PictureBox picFace1;
         private System.Windows.Forms.Button btnCapture;
         private System.Windows.Forms.TextBox txtPersonName;
-        private System.Windows.Forms.Button btnToggleSave;
+        private System.Windows.Forms.Button btnToggleSaveFace;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtFaces;
         private System.Windows.Forms.TextBox txtPerson;
