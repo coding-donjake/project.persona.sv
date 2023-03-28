@@ -1,0 +1,6 @@
+C:\programming\projects\project.persona.sv\c#\Version5\Version5\obj\Debug\Version5.csproj.AssemblyReference.cache
+C:\programming\projects\project.persona.sv\c#\Version5\Version5\obj\Debug\Version5.exe.config
+C:\programming\projects\project.persona.sv\c#\Version5\Version5\obj\Debug\Version5.Form1.resources
+C:\programming\projects\project.persona.sv\c#\Version5\Version5\obj\Debug\Version5.Properties.Resources.resources
+C:\programming\projects\project.persona.sv\c#\Version5\Version5\obj\Debug\Version5.csproj.GenerateResource.cache
+C:\programming\projects\project.persona.sv\c#\Version5\Version5\obj\Debug\Version5.csproj.CoreCompileInputs.cache
