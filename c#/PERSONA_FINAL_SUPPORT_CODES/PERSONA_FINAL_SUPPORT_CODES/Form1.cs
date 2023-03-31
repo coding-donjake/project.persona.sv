@@ -15,13 +15,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-// EMGU CV
+//EMGU CV
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Face;
 using Emgu.CV.CvEnum;
 
-// FILE STREAMING
+//FILE STREAMING
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
@@ -30,7 +30,7 @@ namespace PERSONA_FINAL_SUPPORT_CODES
 {
     public partial class Form1 : Form
     {
-        // camera capture
+        //camera capture
         public Capture videoCapture = null;
         public Mat frame = new Mat();
         public Image<Bgr, Byte> currentFrame = null;
@@ -44,7 +44,7 @@ namespace PERSONA_FINAL_SUPPORT_CODES
         List<int> PersonsLabes = new List<int>();
         List<string> PersonsNames = new List<string>();
 
-        // for face recognition
+        //for face recognition
         LBPHFaceRecognizer recognizer = new LBPHFaceRecognizer();
         private int currentLabel = 0;
         private string currentPerson = "";
@@ -56,6 +56,7 @@ namespace PERSONA_FINAL_SUPPORT_CODES
             if (videoCapture != null) videoCapture.Dispose();
             videoCapture = new Capture();
             Application.Idle += processFrame;
+            timer1.Start();
         }
 
         private void loadSavedFaceFiles()
@@ -88,17 +89,16 @@ namespace PERSONA_FINAL_SUPPORT_CODES
 
         private void processFrame(object sender, EventArgs e)
         {
-            label2.Text = "# of images: " + TrainedFaces.Count;
-
-            // camera capture
+            /*
+            //camera capture
             if (videoCapture != null && videoCapture.Ptr != IntPtr.Zero)
             {
-                // display current frame to a picture box
+                //display current frame to a picture box
                 videoCapture.Retrieve(frame, 0);
                 currentFrame = frame.ToImage<Bgr, Byte>().Resize(pictureBox1.Width, pictureBox1.Height, Inter.Cubic);
                 pictureBox1.Image = currentFrame.Bitmap;
 
-                // detect faces
+                //detect faces
                 pictureBox3.Image = null;
                 label1.Text = "# of faces: 0";
                 Mat grayImage = new Mat();
@@ -119,7 +119,7 @@ namespace PERSONA_FINAL_SUPPORT_CODES
                     }
                 }
 
-                // recognize face
+                recognize face
                 pictureBox2.Image = null;
                 pictureBox4.Image = null;
                 pictureBox5.Image = null;
@@ -164,10 +164,12 @@ namespace PERSONA_FINAL_SUPPORT_CODES
 
                 }
             }
+            */
         }
 
         private async void saveFace(object sender, EventArgs e)
         {
+            /*
             string path = Directory.GetCurrentDirectory() + @"\saved_images";
             if (!Directory.Exists(path))
             {
@@ -179,9 +181,51 @@ namespace PERSONA_FINAL_SUPPORT_CODES
             pictureBox6.Image = saveImage.Bitmap;
             await Task.Run(() =>
             {
-                // wait for saving process to complete before executing the following line
+                //wait for saving process to complete before executing the following line
                 loadSavedFaceFiles();
             });
+            */
+        }
+
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+
+            open.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp";
+            if (open.ShowDialog() == DialogResult.OK)
+            {
+                pictureBox7.Image = new Bitmap(open.FileName);
+
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+           
+            label5.Text = DateTime.Now.ToString("hh:mm:tt");
+            label8.Text = DateTime.Now.ToString("MMM dd yyyy");
+            label7.Text = DateTime.Now.ToString("dddd");
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label14_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
