@@ -89,7 +89,6 @@ namespace PERSONA_FINAL_SUPPORT_CODES
 
         private void processFrame(object sender, EventArgs e)
         {
-            /*
             //camera capture
             if (videoCapture != null && videoCapture.Ptr != IntPtr.Zero)
             {
@@ -164,12 +163,10 @@ namespace PERSONA_FINAL_SUPPORT_CODES
 
                 }
             }
-            */
         }
 
         private async void saveFace(object sender, EventArgs e)
         {
-            /*
             string path = Directory.GetCurrentDirectory() + @"\saved_images";
             if (!Directory.Exists(path))
             {
@@ -184,7 +181,6 @@ namespace PERSONA_FINAL_SUPPORT_CODES
                 //wait for saving process to complete before executing the following line
                 loadSavedFaceFiles();
             });
-            */
         }
 
 
