@@ -56,6 +56,7 @@ namespace FINAL_FINAL_FINAL_NAGID
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.distance = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -210,6 +211,7 @@ namespace FINAL_FINAL_FINAL_NAGID
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(424, 12);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridView1.Size = new System.Drawing.Size(364, 200);
             this.dataGridView1.TabIndex = 18;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
@@ -277,6 +279,7 @@ namespace FINAL_FINAL_FINAL_NAGID
             this.button3.TabIndex = 25;
             this.button3.Text = "time in";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
@@ -286,6 +289,7 @@ namespace FINAL_FINAL_FINAL_NAGID
             this.button4.TabIndex = 26;
             this.button4.Text = "break out";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button5
             // 
@@ -295,6 +299,7 @@ namespace FINAL_FINAL_FINAL_NAGID
             this.button5.TabIndex = 27;
             this.button5.Text = "break in";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button6
             // 
@@ -304,21 +309,32 @@ namespace FINAL_FINAL_FINAL_NAGID
             this.button6.TabIndex = 28;
             this.button6.Text = "check out";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // distance
             // 
             this.distance.AutoSize = true;
-            this.distance.Location = new System.Drawing.Point(221, 415);
+            this.distance.Location = new System.Drawing.Point(221, 412);
             this.distance.Name = "distance";
             this.distance.Size = new System.Drawing.Size(59, 13);
             this.distance.TabIndex = 29;
             this.distance.Text = "distance: 0";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(221, 425);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(88, 13);
+            this.label7.TabIndex = 30;
+            this.label7.Text = "no face detected";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.distance);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
@@ -390,6 +406,7 @@ namespace FINAL_FINAL_FINAL_NAGID
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Label distance;
+        private System.Windows.Forms.Label label7;
     }
 }
 

@@ -32,7 +32,7 @@ namespace FINAL_FINAL_FINAL_NAGID
         private Image<Bgr, Byte> detectedFace = null;
 
         // cascade file for face detection
-        CascadeClassifier faceCasacdeClassifier = new CascadeClassifier(@"haarcascade_frontalface_alt.xml");
+        CascadeClassifier faceCasacdeClassifier = new CascadeClassifier(@"haarcascade_frontalface_default.xml");
 
         // for images
         List<Image<Gray, Byte>> TrainedFaces = new List<Image<Gray, byte>>();
@@ -44,6 +44,8 @@ namespace FINAL_FINAL_FINAL_NAGID
         private int currentLabel = 0;
         private string currentPerson = "";
         private Image<Gray, Byte> currentPersonFace = null;
+
+        private string currentID = "";
 
         public Form1()
         {
@@ -127,6 +129,7 @@ namespace FINAL_FINAL_FINAL_NAGID
                 pictureBox2.Image = null;
                 pictureBox4.Image = null;
                 pictureBox5.Image = null;
+                label7.Text = "no face detected";
                 if (faces.Length == 1 && PersonsNames.Count > 0)
                 {
                     double lowDistance = Double.PositiveInfinity;
@@ -150,10 +153,11 @@ namespace FINAL_FINAL_FINAL_NAGID
                     distance.Text = "distance: " + lowDistance;
                     if (currentPerson != "")
                     {
-                        if (lowDistance > 50)
+                        if (lowDistance > 42)
                         {
                             Image<Bgr, Byte> labeledFrame = currentFrame.Clone();
                             // CvInvoke.PutText(labeledFrame, "???", new Point(faces[0].X - 2, faces[0].Y - 2), FontFace.HersheyComplex, 0.8, new Bgr(Color.Red).MCvScalar);
+                            label7.Text = "unknown";
                             CvInvoke.Rectangle(labeledFrame, faces[0], new Bgr(Color.Red).MCvScalar, 2);
                             pictureBox2.Image = labeledFrame.Bitmap;
                         }
@@ -161,6 +165,7 @@ namespace FINAL_FINAL_FINAL_NAGID
                         {
                             Image<Bgr, Byte> labeledFrame = currentFrame.Clone();
                             // CvInvoke.PutText(labeledFrame, PersonsNames[currentLabel], new Point(faces[0].X - 2, faces[0].Y - 2), FontFace.HersheyComplex, 0.8, new Bgr(Color.Green).MCvScalar);
+                            label7.Text = PersonsNames[currentLabel];
                             CvInvoke.Rectangle(labeledFrame, faces[0], new Bgr(Color.Green).MCvScalar, 2);
                             pictureBox2.Image = labeledFrame.Bitmap;
                             pictureBox5.Image = currentPersonFace.Resize(pictureBox5.Width, pictureBox5.Height, Inter.Cubic).Bitmap;
@@ -179,9 +184,11 @@ namespace FINAL_FINAL_FINAL_NAGID
             }
 
             Image<Bgr, Byte> saveImage = detectedFace.Clone();
-            saveImage.Resize(200, 200, Inter.Cubic).Save(path + @"\" + record.Text.Split(' ')[0] + "_" + DateTime.Now.ToString("dd-mm-yyyy-hh-mm-ss") + ".jpg");
+            saveImage.Resize(200, 200, Inter.Cubic).Save(path + @"\" + record.Text.Split(',')[0] + "_" + DateTime.Now.ToString("dd-mm-yyyy-hh-mm-ss") + ".jpg");
             pictureBox6.Image = saveImage.Bitmap;
-            faceID.Text = record.Text.Split(' ')[0];
+            faceID.Text = record.Text.Split(',')[0];
+            Queries sql = new Queries("localhost", "5432", "postgres", "postgres", "donjake");
+            sql.updateRecordFace(int.Parse(currentID), record.Text.Split(',')[0]);
             await Task.Run(() =>
             {
                 //wait for saving process to complete before executing the following line
@@ -211,8 +218,105 @@ namespace FINAL_FINAL_FINAL_NAGID
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+                currentID = row.Cells["record_id"].Value.ToString();
                 string columnValue = "[" + row.Cells["record_id"].Value.ToString() + "]" + row.Cells["fullname"].Value.ToString();
                 record.Text = columnValue;
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Queries sql = new Queries("localhost", "5432", "postgres", "postgres", "donjake");
+            int record_id = sql.timeIn(label7.Text, "face");
+            if (record_id == 0)
+            {
+                MessageBox.Show("Cannot time in. This happens when you already made a time in action or an error occured during the execution.");
+            }
+            else
+            {
+                NpgsqlDataReader dr = sql.getAttendance(record_id, DateTime.Now.ToString("yyyy-MM-dd" + " 00:00:00"), DateTime.Now.ToString("yyyy-MM-dd" + " 23:59:59"));
+                if (dr.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(dr);
+                    dataGridView2.DataSource = dt;
+                }
+                else
+                {
+                    dr.Close();
+                }
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Queries sql = new Queries("localhost", "5432", "postgres", "postgres", "donjake");
+            int record_id = sql.breakOut(label7.Text, "face");
+            if (record_id == 0)
+            {
+                MessageBox.Show("Cannot break out. This happens when you already made a time in action or an error occured during the execution.");
+            }
+            else
+            {
+                NpgsqlDataReader dr = sql.getAttendance(record_id, DateTime.Now.ToString("yyyy-MM-dd" + " 00:00:00"), DateTime.Now.ToString("yyyy-MM-dd" + " 23:59:59"));
+                if (dr.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(dr);
+                    dataGridView2.DataSource = dt;
+                }
+                else
+                {
+                    dr.Close();
+                }
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Queries sql = new Queries("localhost", "5432", "postgres", "postgres", "donjake");
+            int record_id = sql.breakIn(label7.Text, "face");
+            if (record_id == 0)
+            {
+                MessageBox.Show("Cannot break in. This happens when you already made a time in action or an error occured during the execution.");
+            }
+            else
+            {
+                NpgsqlDataReader dr = sql.getAttendance(record_id, DateTime.Now.ToString("yyyy-MM-dd" + " 00:00:00"), DateTime.Now.ToString("yyyy-MM-dd" + " 23:59:59"));
+                if (dr.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(dr);
+                    dataGridView2.DataSource = dt;
+                }
+                else
+                {
+                    dr.Close();
+                }
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Queries sql = new Queries("localhost", "5432", "postgres", "postgres", "donjake");
+            int record_id = sql.timeOut(label7.Text, "face");
+            if (record_id == 0)
+            {
+                MessageBox.Show("Cannot check out. This happens when you already made a time in action or an error occured during the execution.");
+            }
+            else
+            {
+                NpgsqlDataReader dr = sql.getAttendance(record_id, DateTime.Now.ToString("yyyy-MM-dd" + " 00:00:00"), DateTime.Now.ToString("yyyy-MM-dd" + " 23:59:59"));
+                if (dr.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(dr);
+                    dataGridView2.DataSource = dt;
+                }
+                else
+                {
+                    dr.Close();
+                }
             }
         }
     }

@@ -70,6 +70,267 @@ namespace FINAL_FINAL_FINAL_NAGID
             }
         }
 
+        public int timeIn(string data, string type)
+        {
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+            int record_id = 0;
+            if (type == "face")
+            {
+                NpgsqlCommand comm = new NpgsqlCommand();
+                comm.Connection = conn;
+                comm.CommandType = CommandType.Text;
+                comm.CommandText = "SELECT record_id FROM records WHERE face = @face";
+                comm.Parameters.AddWithValue("@face", data);
+                NpgsqlDataReader dr = comm.ExecuteReader();
+                comm.Dispose();
+                while (dr.Read())
+                {
+                    record_id = dr.GetInt32(dr.GetOrdinal("record_id"));
+                }
+                dr.Close();
+                comm = new NpgsqlCommand();
+                comm.Connection = conn;
+                comm.CommandType = CommandType.Text;
+                comm.CommandText = "SELECT attendance_id FROM attendance WHERE id_record = @record_id AND datetime BETWEEN TO_TIMESTAMP(@start, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP(@end, 'YYYY-MM-DD HH24:MI:SS') AND type = 'time in'";
+                comm.Parameters.AddWithValue("@record_id", record_id);
+                comm.Parameters.AddWithValue("@start", DateTime.Now.ToString("yyyy-MM-dd" + " 00:00:00"));
+                comm.Parameters.AddWithValue("@end", DateTime.Now.ToString("yyyy-MM-dd" + " 23:59:59"));
+                NpgsqlDataReader dr2 = comm.ExecuteReader();
+                comm.Dispose();
+                if (dr2.HasRows)
+                {
+                    dr2.Close();
+                    return 0;
+                }
+                else
+                {
+                    dr2.Close();
+                    if(!createAttendance(record_id, "time in"))
+                    {
+                        return 0;
+                    } else
+                    {
+                        return record_id;
+                    }
+                }
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public int breakOut(string data, string type)
+        {
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+            int record_id = 0;
+            if (type == "face")
+            {
+                NpgsqlCommand comm = new NpgsqlCommand();
+                comm.Connection = conn;
+                comm.CommandType = CommandType.Text;
+                comm.CommandText = "SELECT record_id FROM records WHERE face = @face";
+                comm.Parameters.AddWithValue("@face", data);
+                NpgsqlDataReader dr = comm.ExecuteReader();
+                comm.Dispose();
+                while (dr.Read())
+                {
+                    record_id = dr.GetInt32(dr.GetOrdinal("record_id"));
+                }
+                dr.Close();
+                comm = new NpgsqlCommand();
+                comm.Connection = conn;
+                comm.CommandType = CommandType.Text;
+                comm.CommandText = "SELECT attendance_id FROM attendance WHERE id_record = @record_id AND datetime BETWEEN TO_TIMESTAMP(@start, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP(@end, 'YYYY-MM-DD HH24:MI:SS') AND type = 'break out'";
+                comm.Parameters.AddWithValue("@record_id", record_id);
+                comm.Parameters.AddWithValue("@start", DateTime.Now.ToString("yyyy-MM-dd" + " 00:00:00"));
+                comm.Parameters.AddWithValue("@end", DateTime.Now.ToString("yyyy-MM-dd" + " 23:59:59"));
+                NpgsqlDataReader dr2 = comm.ExecuteReader();
+                comm.Dispose();
+                if (dr2.HasRows)
+                {
+                    dr2.Close();
+                    return 0;
+                }
+                else
+                {
+                    dr2.Close();
+                    if (!createAttendance(record_id, "break out"))
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return record_id;
+                    }
+                }
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public int breakIn(string data, string type)
+        {
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+            int record_id = 0;
+            if (type == "face")
+            {
+                NpgsqlCommand comm = new NpgsqlCommand();
+                comm.Connection = conn;
+                comm.CommandType = CommandType.Text;
+                comm.CommandText = "SELECT record_id FROM records WHERE face = @face";
+                comm.Parameters.AddWithValue("@face", data);
+                NpgsqlDataReader dr = comm.ExecuteReader();
+                comm.Dispose();
+                while (dr.Read())
+                {
+                    record_id = dr.GetInt32(dr.GetOrdinal("record_id"));
+                }
+                dr.Close();
+                comm = new NpgsqlCommand();
+                comm.Connection = conn;
+                comm.CommandType = CommandType.Text;
+                comm.CommandText = "SELECT attendance_id FROM attendance WHERE id_record = @record_id AND datetime BETWEEN TO_TIMESTAMP(@start, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP(@end, 'YYYY-MM-DD HH24:MI:SS') AND type = 'break in'";
+                comm.Parameters.AddWithValue("@record_id", record_id);
+                comm.Parameters.AddWithValue("@start", DateTime.Now.ToString("yyyy-MM-dd" + " 00:00:00"));
+                comm.Parameters.AddWithValue("@end", DateTime.Now.ToString("yyyy-MM-dd" + " 23:59:59"));
+                NpgsqlDataReader dr2 = comm.ExecuteReader();
+                comm.Dispose();
+                if (dr2.HasRows)
+                {
+                    dr2.Close();
+                    return 0;
+                }
+                else
+                {
+                    dr2.Close();
+                    if (!createAttendance(record_id, "break in"))
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return record_id;
+                    }
+                }
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public int timeOut(string data, string type)
+        {
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+            int record_id = 0;
+            if (type == "face")
+            {
+                NpgsqlCommand comm = new NpgsqlCommand();
+                comm.Connection = conn;
+                comm.CommandType = CommandType.Text;
+                comm.CommandText = "SELECT record_id FROM records WHERE face = @face";
+                comm.Parameters.AddWithValue("@face", data);
+                NpgsqlDataReader dr = comm.ExecuteReader();
+                comm.Dispose();
+                while (dr.Read())
+                {
+                    record_id = dr.GetInt32(dr.GetOrdinal("record_id"));
+                }
+                dr.Close();
+                comm = new NpgsqlCommand();
+                comm.Connection = conn;
+                comm.CommandType = CommandType.Text;
+                comm.CommandText = "SELECT attendance_id FROM attendance WHERE id_record = @record_id AND datetime BETWEEN TO_TIMESTAMP(@start, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP(@end, 'YYYY-MM-DD HH24:MI:SS') AND type = 'check out'";
+                comm.Parameters.AddWithValue("@record_id", record_id);
+                comm.Parameters.AddWithValue("@start", DateTime.Now.ToString("yyyy-MM-dd" + " 00:00:00"));
+                comm.Parameters.AddWithValue("@end", DateTime.Now.ToString("yyyy-MM-dd" + " 23:59:59"));
+                NpgsqlDataReader dr2 = comm.ExecuteReader();
+                comm.Dispose();
+                if (dr2.HasRows)
+                {
+                    dr2.Close();
+                    return 0;
+                }
+                else
+                {
+                    dr2.Close();
+                    if (!createAttendance(record_id, "time out"))
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return record_id;
+                    }
+                }
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public bool createAttendance(int record_id, string type)
+        {
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+            try
+            {
+                NpgsqlCommand comm = new NpgsqlCommand();
+                comm = new NpgsqlCommand();
+                comm.Connection = conn;
+                comm.CommandType = CommandType.Text;
+                comm.CommandText = "INSERT INTO attendance (datetime, id_record, type, status) VALUES (TO_TIMESTAMP(@datetime, 'YYYY-MM-DD HH24:MI:SS'), @record_id, @type, 'active')";
+                comm.Parameters.AddWithValue("@datetime", DateTime.Now.ToString("yyyy-MM-dd H:mm:ss"));
+                comm.Parameters.AddWithValue("@record_id", record_id);
+                comm.Parameters.AddWithValue("@type", type);
+                comm.ExecuteNonQuery();
+                comm.Dispose();
+                conn.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+        }
+
+        public NpgsqlDataReader getAttendance(int record_id, string start, string end)
+        {
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+            NpgsqlCommand comm = new NpgsqlCommand();
+            comm.Connection = conn;
+            comm.CommandType = CommandType.Text;
+            comm.CommandText = "SELECT * FROM attendance WHERE datetime BETWEEN TO_TIMESTAMP(@start, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP(@end, 'YYYY-MM-DD HH24:MI:SS') AND id_record = @record_id";
+            comm.Parameters.AddWithValue("@start", start);
+            comm.Parameters.AddWithValue("@end", end);
+            comm.Parameters.AddWithValue("@record_id", record_id);
+            NpgsqlDataReader dr = comm.ExecuteReader();
+            comm.Dispose();
+            return dr;
+        }
+
         public NpgsqlDataReader getRecord(int record_id)
         {
             if (conn.State != ConnectionState.Open)
@@ -85,6 +346,7 @@ namespace FINAL_FINAL_FINAL_NAGID
             comm.Dispose();
             return dr;
         }
+
         public NpgsqlDataReader getRecords()
         {
             if (conn.State != ConnectionState.Open)
@@ -215,6 +477,31 @@ namespace FINAL_FINAL_FINAL_NAGID
                 comm.Parameters.AddWithValue("@gender", gender);
                 comm.Parameters.AddWithValue("@birthdate", birthdate);
                 comm.Parameters.AddWithValue("@department", department);
+                comm.Parameters.AddWithValue("@record_id", record_id);
+                comm.ExecuteNonQuery();
+                comm.Dispose();
+                conn.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool updateRecordFace(int record_id, String face)
+        {
+            try
+            {
+                if (conn.State != ConnectionState.Open)
+                {
+                    conn.Open();
+                }
+                NpgsqlCommand comm = new NpgsqlCommand();
+                comm.Connection = conn;
+                comm.CommandType = CommandType.Text;
+                comm.CommandText = "UPDATE records SET face = @face WHERE record_id = @record_id";
+                comm.Parameters.AddWithValue("@face", face);
                 comm.Parameters.AddWithValue("@record_id", record_id);
                 comm.ExecuteNonQuery();
                 comm.Dispose();
